@@ -7,8 +7,8 @@ local particleSystem = require("entity/particles")
 local cursor = require("entity/fishing_cursor")
 --table containing all possible fish
 local fish = {
-  fish = require("entity/fish")
-  -- examplefish = require("entity/fish/examplefish"),
+  -- fish = require("entity/fish")
+  examplefish = require("entity/fish/examplefish"),
   -- eel = require("entity/fish/eel"),
   -- bass = require("entity/fish/bass"),
   -- goldfish = require("entity/fish/goldfish"),
@@ -65,7 +65,7 @@ function love.draw()
   --if fish.hidden is true, draw as a silhouette
   local x
   local y
-  if fish.fish.hidden == true then
+  if fish["examplefish"].fish.hidden == true then
     x = 0
     y = 0.35
   else
@@ -73,7 +73,7 @@ function love.draw()
     y = 1
   end
   love.graphics.setColor(x,x,x,y)
-  love.graphics.draw(fish.fish.texture, fish.fish.x, fish.fish.y)
+  love.graphics.draw(fish["examplefish"].fish.texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
 
   --red tint
   love.graphics.setColor(0.5, 0, 0, 1)
@@ -84,8 +84,8 @@ function love.draw()
   love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
   --outlines around fish and its bounding box, respectively
-  fish.fish.drawImageEdges();
-  fish.fish.drawCollision();
+  fish["examplefish"].fish.drawImageEdges();
+  fish["examplefish"].fish.drawCollision();
   
   -- love.graphics.line(0, 0, fish.fish.x, fish.fish.y)
 
@@ -106,13 +106,14 @@ function love.update(dt)
   particleSystem:update(dt)
   -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
   -- print(cursor.x , cursor.y)
-  if fish.fish.checkCollision() then
+  if fish["examplefish"].fish.checkCollision() then
     -- print("damn u a real shrigma") 	
     cursor.touching_fish = true
   else 
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
+  fish["examplefish"].fish.x = fish["examplefish"].fish.x + 2
 end
 
 function sig_fig(n)
