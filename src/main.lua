@@ -80,6 +80,13 @@ function love.draw()
   --TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
 
   --if fish.hidden is true, draw as a silhouette
+  for f in pairs(activefish) do
+    if not fish.caught then
+    	love.graphics.setColor(0, 0.1, 0, 0.35)
+      love.graphics.draw(f.texture, f.fish.x, f.fish.y)
+    end
+  end
+
   if not fish["examplefish"].fish.caught then
     love.graphics.setColor(0,0.1,0,0.35)
     love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
