@@ -13,11 +13,19 @@ local fish = {
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
+local fishtray = {
+  
+}
+local activefish = {
+  fish["examplefish"],
+  fish["examplefish"],
+  fish["examplefish"],
+  fish["examplefish"],
+  fish["examplefish"],
+}
 local client = require("websocket").new("192.168.40.44", 8080)
 sincechange = 0
 powerEnough = 0
-
-
 
 function client:onmessage(message)
   n = 1
@@ -67,11 +75,8 @@ function love.load()
 --currently drawn objects
 function love.draw()
   --if fish.hidden is true, draw as a silhouette
-  if fish["examplefish"].fish.caught == false then
+  if not fish["examplefish"].fish.caught then
     love.graphics.setColor(0,0,0,0.35)
-    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
-  else
-    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
   end
   
@@ -99,6 +104,11 @@ function love.draw()
   love.graphics.rectangle("fill", 20,50, 60,powerEnough)
   love.graphics.setColor(0,0,0,1)
   love.graphics.rectangle("line", 20,50, 60,200)
+
+  if fish["examplefish"].fish.caught then
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
+  end
 end
 
 function love.update(dt)
@@ -136,7 +146,7 @@ function love.update(dt)
     if powerMeter > 10 then
       powerEnough = powerEnough + 1
     else
-      powerEnough = powerEnough - 2
+      powerEnough = powerEnough - 1
     end
     if powerEnough > 200 then
       powerEnough = 200
@@ -145,9 +155,6 @@ function love.update(dt)
         fish["examplefish"].fish.caught = true
         fish["examplefish"].fish.x = 380
         powerEnough = 0
-        love.timer.sleep(5)
-        fish["examplefish"].fish.caught = false
-        fish["examplefish"].fish.x = 0
       end
     end
     if powerEnough <= 0 then

@@ -1,7 +1,7 @@
 local cursor = require("entity/fishing_cursor")
 local fish = {}
 fish.x = 380
-fish.y = 320
+fish.y = 300
 fish.hitbox = love.physics.newRectangleShape(fish.x + 23, fish.y + 14, 111, 60, 0)
 fish.texture = love.graphics.newImage("textures/examplefish.png")
 
