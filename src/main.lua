@@ -13,6 +13,35 @@ local fish = {
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
+local client = require("websocket").new("192.168.90.44", 8080)
+local sincechange = 0
+
+function client:onmessage(message)
+  n = 1
+  data = {}
+  for word in string.gmatch(message, '([^,]+)') do
+      data[n] = word
+      n = n + 1
+  end
+  cursor.x = cursor.x + (data[1] * 10)
+  if tonumber(data[2]) < -0.7 and rod.isup == false then
+    rod.isup = true
+    sincechange = 0
+  else
+    sincechange = sincechange + 1
+  end
+  if tonumber(data[2]) > -0.4 and rod.isup == true then
+    rod.isup = false
+    sincechange = 0
+  else
+    sincechange = sincechange + 1
+  end
+  print(rod.isup, sincechange)
+end
+
+function client:onopen()
+  print("connected!")
+end
 
 --accept keypresses and pass them to the keymap function table
 love.keypressed = function(pressed_key)
@@ -58,6 +87,7 @@ function love.draw()
 end
 
 function love.update(dt)
+  client:update()
   if cursor.touching_fish then
     particleSystem:setEmissionRate(30)
     else
@@ -67,10 +97,11 @@ function love.update(dt)
   -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
   -- print(cursor.x , cursor.y)
   if fish["examplefish"].fish.checkCollision() then
-    print("damn u a real shrigma") 	
+    -- print("damn u a real shrigma") 	
     cursor.touching_fish = true
   else 
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
+  
 end
