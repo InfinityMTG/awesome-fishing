@@ -31,6 +31,8 @@ function love.load()
 --currently drawn objects
 function love.draw()
   --if fish.hidden is true, draw as a silhouette
+  local x
+  local y
   if fish["examplefish"].fish.hidden == true then
     x = 0
     y = 0.35

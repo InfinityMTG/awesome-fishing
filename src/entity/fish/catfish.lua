@@ -1,4 +1,4 @@
-fish = require("entity/fish")
+local fish = require("entity/fish")
 
 local catfish = {}
 catfish.fish = fish
