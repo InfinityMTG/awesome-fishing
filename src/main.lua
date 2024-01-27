@@ -14,7 +14,7 @@ local fish = {
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
-local client = require("websocket").new("192.168.90.44", 8080)
+local client = require("websocket").new("192.168.90.44", 12120)
 local sincechange = 0
 
 function client:onmessage(message)
@@ -111,7 +111,9 @@ function love.update(dt)
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  
+  fish.fish.x = fish.fish.x + 1;
+  fish.fish.hitbox:computeAABB(fish.fish.x + 1, 0, 0, 1)
+  fish.hitbox = love.physics.newRectangleShape(fish.fish.x + 1, 0 , 0, 1)
 end
 
 function sig_fig(n)
