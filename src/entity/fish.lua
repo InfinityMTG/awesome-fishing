@@ -1,7 +1,7 @@
 local cursor = require("entity/fishing_cursor")
 local fish = {}
-fish.x = 400
-fish.y = 350
+fish.x = 380
+fish.y = 320
 fish.hidden = true
 fish.hitbox = love.physics.newRectangleShape(fish.x + 23, fish.y + 14, 111, 60, 0)
 fish.texture = love.graphics.newImage("textures/examplefish.png")
@@ -9,13 +9,14 @@ fish.texture = love.graphics.newImage("textures/examplefish.png")
 fish.checkCollision = function ()
   local topLeftX, topLeftY, bottomRightX, bottomRightY = fish.hitbox:computeAABB(0, 0, 0, 1)
   if cursor.x >= topLeftX and cursor.x <= bottomRightX and cursor.y >= topLeftY and cursor.y <= bottomRightY then
-    print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY, "(collision!)")
+    -- print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY, "(collision!)")
   	return true
   else
     print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY)
     return false
   end
 end
+
 fish.drawImageEdges = function ()
   love.graphics.line(fish.x, fish.y, fish.x + 111, fish.y)
   love.graphics.line(fish.x + 111, fish.y, fish.x + 111, fish.y + 60)

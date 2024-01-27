@@ -7,15 +7,17 @@ local particleSystem = require("entity/particles")
 local cursor = require("entity/fishing_cursor")
 --table containing all possible fish
 local fish = {
-  fish = require("entity/fish")
-  -- examplefish = require("entity/fish/examplefish"),
+  examplefish = require("entity/fish/examplefish"),
   -- eel = require("entity/fish/eel"),
   -- bass = require("entity/fish/bass"),
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
-local client = require("websocket").new("192.168.90.44", 12120)
-local sincechange = 0
+local client = require("websocket").new("192.168.40.44", 8080)
+sincechange = 0
+powerEnough = 0
+
+
 
 function client:onmessage(message)
   n = 1
@@ -25,20 +27,19 @@ function client:onmessage(message)
       n = n + 1
   end
   cursor.x = cursor.x + (data[1] * 10)
-  if tonumber(data[2]) < -0.7 and rod.isup == false then
+  if tonumber(data[2]) < -0.55 and rod.isup == false then
     rod.isup = true
     sincechange = 0
   else
     sincechange = sincechange + 1
   end
-  if tonumber(data[2]) > -0.4 and rod.isup == true then
+  if tonumber(data[2]) > -0.45 and rod.isup == true then
     rod.isup = false
     sincechange = 0
   else
     sincechange = sincechange + 1
   end
   print(rod.isup, sincechange)
-  print(sig_fig(data[1]), sig_fig(data[2]), sig_fig(data[3]))
 end
 
 function client:onopen()
@@ -54,9 +55,13 @@ end
 
 --run on load
 function love.load()
+  powerMeter = 0
   Start = love.timer.getTime()
   love.window.setTitle("awesome fishing")
   love.graphics.setBackgroundColor(53/255, 81/255, 92/255, 1)
+  local font = love.graphics.getFont()
+  --regular text
+   powerlevelText = love.graphics.newText(font, "POWER LEVEL")
  end
 
 --currently drawn objects
@@ -64,7 +69,7 @@ function love.draw()
   --if fish.hidden is true, draw as a silhouette
   local x
   local y
-  if fish.fish.hidden == true then
+  if fish["examplefish"].fish.hidden == true then
     x = 0
     y = 0.35
   else
@@ -72,7 +77,7 @@ function love.draw()
     y = 1
   end
   love.graphics.setColor(x,x,x,y)
-  love.graphics.draw(fish.fish.texture, fish.fish.x, fish.fish.y)
+  love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
 
   --red tint
   love.graphics.setColor(0.5, 0, 0, 1)
@@ -83,15 +88,21 @@ function love.draw()
   love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
   --outlines around fish and its bounding box, respectively
-  fish.fish.drawImageEdges();
-  -- fish.fish.drawCollision();
+  fish["examplefish"].fish.drawImageEdges();
+  fish["examplefish"].fish.drawCollision();
   
-  -- love.graphics.line(0, 0, fish.fish.x, fish.fish.y)
+  -- love.graphics.line(fish["examplefish"].fish.x, fish["examplefish"].fish.y, fish["examplefish"].fish.x + 111, fish["examplefish"].fish.y)
 
   --full color sprites
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.draw(particleSystem, cursor.x + 32, cursor.y + 16)
   love.graphics.draw(rod.texture, rod.x, rod.y)
+  love.graphics.draw(love.graphics.newImage("textures/frame.png"), 0, 0)
+  love.graphics.setColor(1,0,0,1)
+  love.graphics.draw (powerlevelText, 10, 10)
+  love.graphics.rectangle("fill", 20,50, 60,powerEnough)
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.rectangle("line", 20,50, 60,200)
 end
 
 function love.update(dt)
@@ -104,17 +115,44 @@ function love.update(dt)
   particleSystem:update(dt)
   -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
   -- print(cursor.x , cursor.y)
-  if fish.fish.checkCollision() then
+  if fish["examplefish"].fish.checkCollision() then
     -- print("damn u a real shrigma") 	
     cursor.touching_fish = true
   else 
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  -- fish.fish.x = fish.fish.x + 0.5;
+  fish["examplefish"].fish.x = fish["examplefish"].fish.x + 0.1
   -- fish.fish.hitbox:computeAABB(fish.fish.x + 0.5, 0, 0, 1)
-  fish.fish.hitbox:release()
-  fish.fish.hitbox = love.physics.newRectangleShape(fish.fish.x + 23, fish.fish.y + 14, 111, 60, 0)
+  fish["examplefish"].fish.hitbox:release()
+  fish["examplefish"].fish.hitbox = love.physics.newRectangleShape(fish["examplefish"].fish.x + 23, fish["examplefish"].fish.y + 14, 111, 60, 0)
+  powerMeter = 50 - math.abs(sincechange - 50)
+  if cursor.touching_fish then
+    if powerMeter > 50 then
+      powerMeter = 50
+    end
+    if powerMeter < 0 then 
+      powerMeter = 0
+    end
+    powerMeter = powerMeter * 4
+    if powerMeter > 10 then
+      powerEnough = powerEnough + 1
+    end
+    if powerEnough > 200 then
+      powerEnough = 200
+      if cursor.touching_fish == true then
+        print("win")
+        fish["examplefish"].fish.x = -20
+        powerEnough = 0
+      end
+    end
+    if powerEnough <= 0 then
+      powerEnough = 0
+    end
+  end
+  if powerEnough > 0 then 
+    powerEnough = powerEnough - 2
+  end
 end
 
 function sig_fig(n)
