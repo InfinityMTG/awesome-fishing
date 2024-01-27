@@ -37,6 +37,7 @@ function client:onmessage(message)
     sincechange = sincechange + 1
   end
   print(rod.isup, sincechange)
+  print(sig_fig(data[1]), sig_fig(data[2]), sig_fig(data[3]))
 end
 
 function client:onopen()
@@ -110,4 +111,9 @@ function love.update(dt)
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
   
+end
+
+function sig_fig(n)
+  return tonumber(string.format("%.2f", n))
+  -- change the 3 in 3f to set the amount of sig figs.
 end
