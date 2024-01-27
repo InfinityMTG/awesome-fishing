@@ -8,20 +8,20 @@ local cursor = require("entity/fishing_cursor")
 --table containing all possible fish
 local fish = {
   examplefish = require("entity/fish/examplefish"),
-  -- eel = require("entity/fish/eel"),
   bass = require("entity/fish/bass"),
+  -- eel = require("entity/fish/eel"),
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
-local fishtray = {
+-- local fishtray = {
   
-}
+-- }
 local activefish = {
-  fish["bass"],
-  fish["bass"],
+  -- fish["bass"],
+  -- fish["bass"],
   fish["examplefish"],
-  fish["examplefish"],
-  fish["bass"],
+  -- fish["examplefish"],
+  -- fish["bass"],
 }
 local client = require("websocket").new("192.168.40.44", 8080)
 sincechange = 0
@@ -80,18 +80,13 @@ function love.draw()
   --TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
 
   --if fish.hidden is true, draw as a silhouette
-  for f in pairs(activefish) do
-    if not fish.caught then
+  for i, f in pairs(activefish) do
+    if not f.caught then
     	love.graphics.setColor(0, 0.1, 0, 0.35)
       love.graphics.draw(f.texture, f.fish.x, f.fish.y)
     end
   end
 
-  if not fish["examplefish"].fish.caught then
-    love.graphics.setColor(0,0.1,0,0.35)
-    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
-  end
-  
   --red tint
   love.graphics.setColor(0.5, 0, 0, 1)
   love.graphics.draw(cursor.texture, cursor.x, cursor.y)
@@ -100,6 +95,10 @@ function love.draw()
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
+  for i, f in pairs(activefish) do
+    f.fish.drawImageEdges()
+    print(f.fish.x + f.fish.width)
+  end
   --outlines around fish and its bounding box, respectively
   -- fish["examplefish"].fish.drawImageEdges();
   
@@ -119,10 +118,10 @@ function love.draw()
   drawWoman(woman2)
   drawWoman(woman3)
 
-  if fish["examplefish"].fish.caught then
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
-  end
+  -- if fish["examplefish"].fish.caught then
+  --   love.graphics.setColor(1,1,1,1)
+  --   love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
+  -- end
 end
 
 function love.update(dt)
@@ -142,12 +141,19 @@ function love.update(dt)
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  if not fish["examplefish"].fish.caught then
-    fish["examplefish"].fish.x = fish["examplefish"].fish.x + 0.1
+  for i, f in pairs(activefish) do
+    if not f.caught then
+      -- f.fish.x = f.fish.x + 0.1
+    end
   end
   -- fish.fish.hitbox:computeAABB(fish.fish.x + 0.5, 0, 0, 1)
-  fish["examplefish"].fish.hitbox:release()
-  fish["examplefish"].fish.hitbox = love.physics.newRectangleShape(fish["examplefish"].fish.x + 23, fish["examplefish"].fish.y + 14, 111, 60, 0)
+  for i, f in pairs(activefish) do
+    if not f.caught then
+      f.fish.hitbox:release()
+      f.fish.hitbox = love.physics.newRectangleShape(f.fish.x + f.fish.offsetX, f.fish.y + f.fish.offsetY, f.fish.width, f.fish.height, 0)
+    end
+  end
+
   powerMeter = 50 - math.abs(sincechange - 50)
   if cursor.touching_fish then
     if powerMeter > 50 then
