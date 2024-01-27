@@ -163,6 +163,7 @@ function love.update(dt)
   elseif powerEnough > 0 then 
     powerEnough = powerEnough - 1
   end
+  collectgarbage()
 end
 
 function sig_fig(n)
