@@ -1,6 +1,6 @@
 local rod = {}
-rod.texture = love.graphics.newImage("./textures/fishing rod real.png")
-rod.x = 0
-rod.y = 0
+rod.texture = love.graphics.newImage("textures/cat.png")
+rod.x = 100
+rod.y = 200
 
 return rod
