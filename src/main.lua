@@ -9,7 +9,7 @@ local cursor = require("entity/fishing_cursor")
 local fish = {
   examplefish = require("entity/fish/examplefish"),
   -- eel = require("entity/fish/eel"),
-  -- bass = require("entity/fish/bass"),
+  bass = require("entity/fish/bass"),
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
@@ -17,11 +17,11 @@ local fishtray = {
   
 }
 local activefish = {
+  fish["bass"],
+  fish["bass"],
   fish["examplefish"],
   fish["examplefish"],
-  fish["examplefish"],
-  fish["examplefish"],
-  fish["examplefish"],
+  fish["bass"],
 }
 local client = require("websocket").new("192.168.40.44", 8080)
 sincechange = 0
@@ -74,6 +74,8 @@ function love.load()
 
 --currently drawn objects
 function love.draw()
+  --TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
+
   --if fish.hidden is true, draw as a silhouette
   if not fish["examplefish"].fish.caught then
     love.graphics.setColor(0,0.1,0,0.35)
