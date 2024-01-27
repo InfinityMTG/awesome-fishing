@@ -23,7 +23,6 @@ end
 
 function love.update(dt)
   if love.timer.getTime() - start > 1 then
-    print("stop")
     particleSystem:setEmissionRate(0)
     else
       particleSystem:setEmissionRate(30)
