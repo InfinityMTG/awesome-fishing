@@ -12,7 +12,7 @@ fish.checkCollision = function ()
     -- print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY, "(collision!)")
   	return true
   else
-    -- print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY)
+    print("cursor: " , cursor.x , cursor.y, "fish: ", topLeftX, fish.x, topLeftY, fish.y, bottomRightX, bottomRightY)
     return false
   end
 end
