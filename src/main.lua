@@ -111,9 +111,10 @@ function love.update(dt)
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  fish.fish.x = fish.fish.x + 1;
-  fish.fish.hitbox:computeAABB(fish.fish.x + 1, 0, 0, 1)
-  fish.hitbox = love.physics.newRectangleShape(fish.fish.x + 1, 0 , 0, 1)
+  -- fish.fish.x = fish.fish.x + 0.5;
+  -- fish.fish.hitbox:computeAABB(fish.fish.x + 0.5, 0, 0, 1)
+  fish.fish.hitbox:release()
+  fish.fish.hitbox = love.physics.newRectangleShape(fish.fish.x + 23, fish.fish.y + 14, 111, 60, 0)
 end
 
 function sig_fig(n)
