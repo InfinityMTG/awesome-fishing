@@ -4,18 +4,28 @@ local particles = require("entity/particles")
 local cursor = require("entity/fishing_cursor")
 
 function love.load()
+  start = love.timer.getTime()
   love.window.setTitle("awesome fishing")
   love.graphics.setBackgroundColor(53/255, 81/255, 92/255, 1)
 end
 
 function love.draw()
+
   love.graphics.draw(rod.texture, rod.x, rod.y)
   love.graphics.draw(cursor.texture, cursor.x, cursor.y)
+  love.graphics.draw(particleSystem, cursor.x, cursor.y);
 end
 
-function love.update()
+function love.update(dt)
+  if love.timer.getTime() - start > 1 then
+    print("stop")
+    particleSystem:setEmissionRate(0)
+    else
+      particleSystem:setEmissionRate(30)
+    end
   print(rod.x, rod.y)
   rod.x = 295 + ((cursor.x - 480) * 2)
+  particleSystem:update(dt)
 end
 
 function sig_fig(n)
