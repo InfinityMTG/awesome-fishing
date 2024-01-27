@@ -13,7 +13,8 @@ local fish = {
   -- goldfish = require("entity/fish/goldfish"),
   -- catfish = require("entity/fish/catfish"),
 }
-local client = require("websocket").new("192.168.90.44", 8080)
+-- local client = require("websocket").new("192.168.90.44", 8080)
+local client = require("websocket").new("localhost", 8080)
 local sincechange = 0
 
 function client:onmessage(message)
@@ -26,15 +27,15 @@ function client:onmessage(message)
   cursor.x = cursor.x + (data[1] * 10)
   if tonumber(data[2]) < -0.7 and rod.isup == false then
     rod.isup = true
-    sincechange = 0
-  else
-    sincechange = sincechange + 1
+    -- sincechange = 0
+  -- else
+  --   sincechange = sincechange + 1
   end
-  if tonumber(data[2]) > -0.4 and rod.isup == true then
+  if tonumber(data[2]) > -0.5 and rod.isup == true then
     rod.isup = false
-    sincechange = 0
-  else
-    sincechange = sincechange + 1
+    -- sincechange = 0
+  -- else
+  --   sincechange = sincechange + 1
   end
   print(rod.isup, sincechange)
   print(sig_fig(data[1]), sig_fig(data[2]), sig_fig(data[3]))
@@ -91,6 +92,7 @@ function love.draw()
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.draw(particleSystem, cursor.x + 32, cursor.y + 16)
   love.graphics.draw(rod.texture, rod.x, rod.y)
+  love.graphics.draw(love.graphics.newImage("textures/frame.png"), 0, 0)
 end
 
 function love.update(dt)
@@ -110,7 +112,6 @@ function love.update(dt)
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  
 end
 
 function sig_fig(n)
