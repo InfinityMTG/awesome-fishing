@@ -40,3 +40,4 @@ luac.out
 *.hex
 
 love.app
+.DS_Store
