@@ -42,6 +42,15 @@ function love.update(dt)
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
   particleSystem:update(dt)
+  -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
+  -- print(cursor.x , cursor.y)
+  if fish["examplefish"].fish.checkCollision() then
+    print("damn u a real shrigma") 	
+    cursor.touching_fish = true
+  else 
+    cursor.touching_fish = false
+  end
+
 end
 
 love.keypressed = function(pressed_key)
