@@ -1,7 +1,6 @@
 local rod = require("entity/rod")
 local keymap = require("keymap")
-local rod = require("entity/particles")
-local rod = require("entity/rod")
+local particleSystem = require("entity/particles")
 
 function love.load()
   love.window.setTitle("awesome fishing")
