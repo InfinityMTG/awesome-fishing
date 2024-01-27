@@ -31,6 +31,8 @@ function love.load()
 --currently drawn objects
 function love.draw()
   --if fish.hidden is true, draw as a silhouette
+  local x
+  local y
   if fish["examplefish"].fish.hidden == true then
     x = 0
     y = 0.35
@@ -70,8 +72,5 @@ function love.update(dt)
   else 
     cursor.touching_fish = false
   end
-
-end
-
   rod.x = 295 + ((cursor.x - 480) * 2)
 end
