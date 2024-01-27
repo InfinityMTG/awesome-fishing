@@ -27,8 +27,7 @@ function love.update(dt)
     particleSystem:setEmissionRate(0)
     else
       particleSystem:setEmissionRate(30)
-    end
-  print(rod.x, rod.y)
+  end
   rod.x = 295 + ((cursor.x - 480) * 2)
   particleSystem:update(dt)
 end
