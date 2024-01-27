@@ -67,18 +67,14 @@ function love.load()
 --currently drawn objects
 function love.draw()
   --if fish.hidden is true, draw as a silhouette
-  local x
-  local y
-  if fish["examplefish"].fish.hidden == true then
-    x = 0
-    y = 0.35
+  if fish["examplefish"].fish.caught == false then
+    love.graphics.setColor(0,0,0,0.35)
+    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
   else
-    x = 1
-    y = 1
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
   end
-  love.graphics.setColor(x,x,x,y)
-  love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
-
+  
   --red tint
   love.graphics.setColor(0.5, 0, 0, 1)
   love.graphics.draw(cursor.texture, cursor.x, cursor.y)
@@ -89,7 +85,7 @@ function love.draw()
 
   --outlines around fish and its bounding box, respectively
   fish["examplefish"].fish.drawImageEdges();
-  fish["examplefish"].fish.drawCollision();
+  -- fish["examplefish"].fish.drawCollision();
   
   -- love.graphics.line(fish["examplefish"].fish.x, fish["examplefish"].fish.y, fish["examplefish"].fish.x + 111, fish["examplefish"].fish.y)
 
@@ -122,7 +118,9 @@ function love.update(dt)
     cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
-  fish["examplefish"].fish.x = fish["examplefish"].fish.x + 0.1
+  if not fish["examplefish"].fish.caught then
+    fish["examplefish"].fish.x = fish["examplefish"].fish.x + 0.1
+  end
   -- fish.fish.hitbox:computeAABB(fish.fish.x + 0.5, 0, 0, 1)
   fish["examplefish"].fish.hitbox:release()
   fish["examplefish"].fish.hitbox = love.physics.newRectangleShape(fish["examplefish"].fish.x + 23, fish["examplefish"].fish.y + 14, 111, 60, 0)
@@ -137,21 +135,26 @@ function love.update(dt)
     powerMeter = powerMeter * 4
     if powerMeter > 10 then
       powerEnough = powerEnough + 1
+    else
+      powerEnough = powerEnough - 2
     end
     if powerEnough > 200 then
       powerEnough = 200
       if cursor.touching_fish == true then
         print("win")
-        fish["examplefish"].fish.x = -20
+        fish["examplefish"].fish.caught = true
+        fish["examplefish"].fish.x = 380
         powerEnough = 0
+        love.timer.sleep(5)
+        fish["examplefish"].fish.caught = false
+        fish["examplefish"].fish.x = 0
       end
     end
     if powerEnough <= 0 then
       powerEnough = 0
     end
-  end
-  if powerEnough > 0 then 
-    powerEnough = powerEnough - 2
+  elseif powerEnough > 0 then 
+    powerEnough = powerEnough - 1
   end
 end
 
