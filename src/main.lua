@@ -3,6 +3,7 @@ local keymap = require("keymap")
 
 function love.load()
   love.window.setTitle("awesome fishing")
+  love.graphics.setBackgroundColor(53/255, 81/255, 92/255, 1)
 end
 
 function love.draw()
