@@ -1,15 +1,15 @@
 local rod = require("entity/rod")
+local keymap = require("keymap")
 
 function love.load()
   love.window.setTitle("awesome fishing")
 end
 
 function love.draw()
-  love.graphics.draw(rod.texture, 200+100*math.sin(rod.x), rod.y)
+  love.graphics.draw(rod.texture, rod.x, rod.y)
 end
 
 function love.update()
-  rod.x = sig_fig((rod.x + 0.1) % (math.pi * 2))
   print(rod.x, rod.y)
 end
 
@@ -18,3 +18,8 @@ function sig_fig(n)
   -- change the 3 in 3f to set the amount of sig figs.
 end
 
+love.keypressed = function(pressed_key)
+  if keymap[pressed_key] then
+      keymap[pressed_key]()
+  end
+end
