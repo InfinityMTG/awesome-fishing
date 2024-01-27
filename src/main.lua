@@ -3,7 +3,7 @@ love = love
 
 local rod = require("entity/rod")
 local keymap = require("keymap")
-local particles = require("entity/particles")
+local particleSystem = require("entity/particles")
 local cursor = require("entity/fishing_cursor")
 
 function love.load()
