@@ -1,11 +1,11 @@
-rod = require("entity/rod")
+cursor = require("entity/fishing_cursor")
 
 local keymap = {
   right = function()
-    rod.x = rod.x + 20
+    cursor.x = cursor.x + 20
   end,
   left = function()
-    rod.x = rod.x - 20
+    cursor.x = cursor.x - 20
   end,
 }
 

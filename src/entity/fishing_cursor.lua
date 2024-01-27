@@ -1,5 +1,5 @@
-local cursor ()
-cursor.texture = love.graphics.newImage("texture/cursor.png")
+local cursor = {}
+cursor.texture = love.graphics.newImage("textures/cursor.png")
 cursor.x = 480
 cursor.y = 360
 
