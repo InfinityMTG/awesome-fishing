@@ -51,6 +51,12 @@ function love.draw()
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
+  --outlines around fish and its bounding box, respectively
+  fish["examplefish"].fish.drawImageEdges();
+  fish["examplefish"].fish.drawCollision();
+  
+  -- love.graphics.line(fish["examplefish"].fish.x, fish["examplefish"].fish.y, fish["examplefish"].fish.x + 111, fish["examplefish"].fish.y)
+
   --full color sprites
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.draw(particleSystem, cursor.x + 32, cursor.y + 16)
