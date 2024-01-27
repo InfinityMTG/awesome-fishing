@@ -69,7 +69,10 @@ function love.load()
   love.graphics.setBackgroundColor(53/255, 81/255, 92/255, 1)
   local font = love.graphics.getFont()
   --regular text
-   powerlevelText = love.graphics.newText(font, "POWER LEVEL")
+  powerlevelText = love.graphics.newText(font, "POWER LEVEL")
+  woman1 = createWoman("Goldfish",80,"exampletxt")
+  woman2 = createWoman("Catfish",280,"exampletxt")
+  woman3 = createWoman("Bass",480,"exampletxt")
  end
 
 --currently drawn objects
@@ -105,6 +108,9 @@ function love.draw()
   love.graphics.rectangle("fill", 20,50, 60,powerEnough)
   love.graphics.setColor(0,0,0,1)
   love.graphics.rectangle("line", 20,50, 60,200)
+  drawWoman(woman1)
+  drawWoman(woman2)
+  drawWoman(woman3)
 
   if fish["examplefish"].fish.caught then
     love.graphics.setColor(1,1,1,1)
@@ -165,6 +171,32 @@ function love.update(dt)
     powerEnough = powerEnough - 1
   end
   collectgarbage()
+end
+
+function createWoman(name,y,texture)
+  local font = love.graphics.newFont(24)
+  --regular text
+   local text = love.graphics.newText(font, name)
+  local woman = {
+    text = text,
+    x = 810,
+    y = y,
+    texture = texture,
+    love = 50
+  }
+  return woman
+end
+
+function drawWoman(woman)
+  love.graphics.setColor(1, 0.77, 0.62,1)
+  love.graphics.rectangle("fill",woman.x-25,woman.y-40,150,190)
+  love.graphics.setColor(0.5,0.5,0.5,1)
+  love.graphics.rectangle("fill", woman.x,woman.y, 100,100)
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.draw (woman.text, woman.x-5, woman.y-30)
+  love.graphics.rectangle("fill",woman.x,woman.y+110,100,20)
+  love.graphics.setColor(1,0.2,0.2,1)
+  love.graphics.rectangle("fill",woman.x,woman.y+110,woman.love,20)
 end
 
 function sig_fig(n)
