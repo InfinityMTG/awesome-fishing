@@ -84,7 +84,7 @@ function love.draw()
 
   --outlines around fish and its bounding box, respectively
   fish.fish.drawImageEdges();
-  fish.fish.drawCollision();
+  -- fish.fish.drawCollision();
   
   -- love.graphics.line(0, 0, fish.fish.x, fish.fish.y)
 
