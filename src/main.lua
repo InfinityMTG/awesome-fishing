@@ -76,7 +76,7 @@ function love.load()
 function love.draw()
   --if fish.hidden is true, draw as a silhouette
   if not fish["examplefish"].fish.caught then
-    love.graphics.setColor(0,0,0,0.35)
+    love.graphics.setColor(0,0.1,0,0.35)
     love.graphics.draw(fish["examplefish"].texture, fish["examplefish"].fish.x, fish["examplefish"].fish.y)
   end
   
@@ -89,8 +89,7 @@ function love.draw()
   love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
   --outlines around fish and its bounding box, respectively
-  fish["examplefish"].fish.drawImageEdges();
-  -- fish["examplefish"].fish.drawCollision();
+  -- fish["examplefish"].fish.drawImageEdges();
   
   -- love.graphics.line(fish["examplefish"].fish.x, fish["examplefish"].fish.y, fish["examplefish"].fish.x + 111, fish["examplefish"].fish.y)
 
