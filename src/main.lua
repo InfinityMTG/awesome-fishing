@@ -1,4 +1,5 @@
 local rod = require("entity/rod")
+local rod = require("entity/particles")
 
 function love.load()
   love.window.setTitle("awesome fishing")
