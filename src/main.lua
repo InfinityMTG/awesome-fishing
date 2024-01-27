@@ -64,6 +64,19 @@ function love.update(dt)
       particleSystem:setEmissionRate(0)
   end
   particleSystem:update(dt)
+<<<<<<< HEAD
+  -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
+  -- print(cursor.x , cursor.y)
+  if fish["examplefish"].fish.checkCollision() then
+    print("damn u a real shrigma") 	
+    cursor.touching_fish = true
+  else 
+    cursor.touching_fish = false
+  end
+
+end
+=======
+>>>>>>> c931c4eb6ac09446ec599a8f05393be6b6599b22
 
   rod.x = 295 + ((cursor.x - 480) * 2)
 end
