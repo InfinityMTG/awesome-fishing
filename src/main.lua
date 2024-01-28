@@ -78,7 +78,8 @@ end
 slidingFish = {}
 function goToWoman(myWoman, myFish)
     table.insert(slidingFish, myFish)
-    myWoman.love = myWoman.love + 10
+    myWoman.love = myWoman.love + 33
+    myWoman.currentTexture = 2
     -- woman reactions
 end
 
@@ -112,7 +113,7 @@ end
 -- draws the fish using the texture, x, y and offsets. currently also draws edges to the sprite
 function drawFish(myFish)
     love.graphics.draw(myFish.texture, myFish.x + myFish.offsetX, myFish.y + myFish.offsetY)
-    fishDrawImageEdges(myFish)
+    -- fishDrawImageEdges(myFish)
     -- print("fish draw")
 end
 
@@ -137,6 +138,7 @@ function createWoman(name, y, texture)
         text = text,
         x = 810,
         y = y,
+        currentTexture = 1,
         textures = {love.graphics.newImage("textures/woman/" .. texture .. "1.png", conf),
                     love.graphics.newImage("textures/woman/" .. texture .. "2.png", conf),
                     love.graphics.newImage("textures/woman/" .. texture .. "3.png", conf)},
@@ -148,7 +150,7 @@ function createWoman(name, y, texture)
 end
 
 function drawWoman(woman)
-    love.graphics.setColor(1, 0.77, 0.62, 1)
+    love.graphics.setColor(1, 0.9, 0.9, 1)
     love.graphics.rectangle("fill", woman.x - 25, woman.y - 40, 150, 190)
     -- love.graphics.setColor(0.5,0.5,0.5,1)
     -- love.graphics.rectangle("fill", woman.x,woman.y, 100,100)
@@ -247,7 +249,8 @@ function love.load()
   activefish = {
     createFish("bass", 138, 105, 0, 0, 10, 1, "sin", 900),
     createFish("catfish", 138, 105, 0, 0, 10, -1, "cos"),
-    createFish("goldfish", 138, 105, 0, 0, 10, 1, "tan")
+    createFish("goldfish", 138, 105, 0, 0, 10, 1, "tan"),
+    createFish("boot",100,100,0,0,5, 0, "sin",100)
   }
  end
 
@@ -256,7 +259,7 @@ function love.draw()
     -- TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
     -- solved?
 
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 0.3)
     love.graphics.draw(love.graphics.newImage("textures/pond.png"))
     -- end
 
