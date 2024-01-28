@@ -17,7 +17,7 @@ local cursor = require("entity/fishing_cursor")
 function createFish (name, width, height, offsetX, offsetY, dpiscale, x, y)
   --if x has not been specified then set a default value, same with y
   if not x then
-    x = 380    
+    x = 860    
   end
   if not y then
     y = 300
@@ -69,8 +69,7 @@ end
 --draws the fish using the texture, x, y and offsets. currently also draws edges to the sprite
 function drawFish (myFish)
   love.graphics.draw(myFish.texture, myFish.x + myFish.offsetX, myFish.y + myFish.offsetY)
-  fishDrawImageEdges(myFish)
-  -- print("fish draw")
+  -- fishDrawImageEdges(myFish)
 end
 
 --takes a fish and draws the bounding box of the sprite according to the x, y, width, height and offsets. this may not necessarily correspond to actual collision
@@ -116,7 +115,7 @@ end
 ------
 
 --define the server, says it takes 3 arguments but it seems to work fine with 2
-local client = require("websocket").new("192.168.40.51", 8080)
+local client = require("websocket").new("192.168.40.44", 8080)
 sincechange = 0
 powerEnough = 0
 
@@ -190,14 +189,10 @@ function love.load()
   woman3 = createWoman("Bass",480,"bass")
   --creates 2 fish objects and stores them within a table
   activefish = {
-    createFish("examplefish", 111, 60, 0, 0, 1, 200),
-    createFish("bass", 100, 107, 0, 0, 30),
-    createFish("examplefish", 111, 60, 0, 0, 1, 100),
-    createFish("bass", 100, 107, 0, 0, 30, 150),
-    createFish("examplefish", 111, 60, 0, 0, 1, 500),
-    createFish("bass", 100, 107, 0, 0, 30, 400),
-    createFish("examplefish", 111, 60, 0, 0, 1, 600),
-    createFish("bass", 100, 107, 0, 0, 30, 350)
+    -- createFish("examplefish", 111, 60, 0, 0, 1, 200),
+    createFish("bass", 138, 105, 0, 0, 10, 900),
+    createFish("catfish", 138, 105, 0, 0, 10),
+    createFish("goldfish", 138, 105, 0, 0, 10)
   }
  end
 
@@ -264,11 +259,43 @@ function love.update(dt)
   end
   --move the rod at an offset from the target for the illusion of depth
   rod.x = 295 + ((cursor.x - 480) * 2)
-  -- for i, f in pairs(activefish) do
-  --   if not f.caught then
-  --     -- f.fish.x = f.fish.x + 0.1
-  --   end
-  -- end
+  for i, f in pairs(activefish) do
+    if not f.caught then
+      if i == 1 then
+        f.x = f.x - 0.5
+        if f.x < -200 then
+          f.x = 860
+        end
+        if f.x > 960 then
+          f.x = -180
+        end
+        f.y = 280 + 20 * math.sin((f.x / 2) % (math.pi * 2))
+      end
+      if i == 2 then
+        f.x = f.x - 0.75
+        if f.x < -200 then
+          f.x = 860
+        end
+        if f.x > 960 then
+          f.x = -180
+        end
+        f.y = 280 + 30 * math.cos((f.x / 3) % (math.pi * 2))
+      end
+      if i == 3 then
+        f.x = f.x - 0.2
+        if f.x < -200 then
+          f.x = 860
+        end
+        if f.x > 960 then
+          f.x = -180
+        end
+        f.y = 280 + 20 * math.tan((f.x / 40) % (math.pi * 2))
+        if f.y < -150 then
+          f.y = 620
+        end
+      end
+    end
+  end
   for i, f in pairs(activefish) do
     if not f.caught then
       f.hitbox = updateFishBox(f)
@@ -293,10 +320,11 @@ function love.update(dt)
       powerEnough = 200 
       if cursor.touching_fish == true then
         for i,f in pairs(activefish) do
-          if f.hitbox:testPoint(0, 0, 0, cursor.x, cursor.y) then
+          if f.hitbox:testPoint(0, 0, 0, cursor.x, cursor.y) and not f.caught then
             print("win")
             fishCaught(f)
             powerEnough = 0
+            break
           end
         end
       end
