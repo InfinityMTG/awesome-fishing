@@ -53,14 +53,14 @@ function fishCaught (myFish)
 end
 
 --checks collision against a cursor object passed (might have issues)
-function fishCheckCollision (myFish, cursor)
+function fishCheckCollision (myFish, myCursor)
   if not myFish.caught then
     local topLeftX, topLeftY, bottomRightX, bottomRightY = myFish.hitbox:computeAABB(0, 0, 0, 1)
-    if cursor.x >= topLeftX and cursor.x <= bottomRightX and cursor.y >= topLeftY and cursor.y <= bottomRightY then
-      -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY, "(collision!)")
+    if myCursor.x >= topLeftX and myCursor.x <= bottomRightX and myCursor.y >= topLeftY and myCursor.y <= bottomRightY then
+      -- print("myCursor: " , myCursor.x , myCursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY, "(collision!)")
     	return true
     else
-      -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
+      -- print("myCursor: " , myCursor.x , myCursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
       return false
     end
   end
