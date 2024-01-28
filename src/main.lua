@@ -12,9 +12,13 @@ local cursor = require("entity/fishing_cursor")
 
 local fishMovement = {"sin", "cos", "tan"}
 
-local fishNames = {"bass", "goldfish", "catfish", "boot"}
+local fishNames = {"bass", "goldfish", "catfish"}
+
 -- fish stuff
 ------
+
+win = false 
+
 local fishCount = 6
 -- constructor for a fish; x and y are optional parameters
 function createFish(name, width, height, offsetX, offsetY, dpiscale, direction, movement, x, y)
@@ -81,9 +85,12 @@ end
 slidingFish = {}
 function goToWoman(myWoman, myFish)
     table.insert(slidingFish, myFish)
-    myWoman.love = myWoman.love + 33
+    myWoman.love = myWoman.love + 50
     myWoman.currentTexture = 2
     -- woman reactions
+    if woman1.love >= 100 and woman2.love >= 100 and woman3.love >= 100 then
+      win = true
+    end
 end
 
 function checkDrawer(myFish)
@@ -172,7 +179,7 @@ end
 ------
 
 -- define the server, says it takes 3 arguments but it seems to work fine with 2
-local client = require("websocket").new("192.168.40.44", 8080)
+local client = require("websocket").new("192.168.11.44", 8080)
 sincechange = 0
 powerEnough = 0
 
@@ -255,10 +262,16 @@ function love.load()
     createFish("goldfish", 138, 105, 0, 0, 10, 1, "tan"),
     createFish("boot",100,100,0,0,5, 0, "sin",100)
   }
+  winImg = love.graphics.newImage("textures/win.png")
  end
 
 -- currently drawn objects
 function love.draw()
+  if win then
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(winImg,-150,0)
+    return
+  end
     -- TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
     -- solved?
 
@@ -282,12 +295,10 @@ function love.draw()
         end
         drawFish(f)
     end
-
+  
     -- full color sprites
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(love.graphics.newImage("textures/frame.png"), 0, 0)
-
-  
 
     love.graphics.setColor(1, 1, 1, 1)
     drawWoman(woman1)
@@ -302,17 +313,25 @@ function love.draw()
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.rectangle("line", 20, 50, 60, 200)
 
+
+
 end
 
 rng = 0
 
 function love.update(dt)
+  if win then
+    
+    return
+  end
     client:update()
     if (#activefish < fishCount) then
       math.randomseed(os.time() + rng)
       rng = rng + math.random(-10, 10)
       randomMovement = math.random(1, 3)
-      randomName = math.random(1, 4)
+      math.randomseed(os.time() + rng)
+      rng = rng + math.random(-10, 10)
+      randomName = math.random(1, 3)
       randomOffsetX = math.random(-300, 300)
       randomDirection = math.random(0, 1)
       if randomDirection == 0 then
@@ -369,7 +388,7 @@ function love.update(dt)
         if f.x > 960 then
           f.x = -180
         end
-        f.y = 280 + 30 * math.cos((f.x / 3) % (math.pi * 2))
+        f.y = 280 + 10 * math.cos((f.x / 3) % (math.pi * 2))
       end
       if f.movement == "tan" then
         f.x = f.x - (f.direction * 0.2)
