@@ -10,9 +10,12 @@ local particleSystem = require("entity/particles")
 -- the cursor used to select a fish
 local cursor = require("entity/fishing_cursor")
 
+local fishMovement = {"sin", "cos", "tan"}
+
+local fishNames = {"bass", "goldfish", "catfish", "boot"}
 -- fish stuff
 ------
-
+local fishCount = 6
 -- constructor for a fish; x and y are optional parameters
 function createFish(name, width, height, offsetX, offsetY, dpiscale, movement, x, y)
     -- if x has not been specified then set a default value, same with y
@@ -293,8 +296,19 @@ function love.draw()
 
 end
 
+rng = 0
+
 function love.update(dt)
     client:update()
+    if (#activefish < fishCount) then
+      math.randomseed(os.time() + rng)
+      rng = rng + math.random(-10, 10)
+      randomMovement = math.random(1, 3)
+      randomName = math.random(1, 4)
+      randomOffsetX = math.random(-300, 300)
+    	table.insert(activefish, createFish(fishNames[randomName], 138, 105, 0, 0, 10, fishMovement[randomMovement], 380 + randomOffsetX))
+    end 
+    
     for i, v in pairs(slidingFish) do
         v.x = v.x + 4
         if v.x > 1000 then
