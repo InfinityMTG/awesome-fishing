@@ -274,10 +274,6 @@ function love.draw()
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.line(rod.x + 246, rod.y + 1, cursor.x + 32, cursor.y + 16)
 
-    -- full color sprites
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(love.graphics.newImage("textures/frame.png"), 0, 0)
-
     for i, f in pairs(activefish) do
         if f.caught then
             love.graphics.setColor(1, 1, 1, 1)
@@ -286,6 +282,12 @@ function love.draw()
         end
         drawFish(f)
     end
+
+    -- full color sprites
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(love.graphics.newImage("textures/frame.png"), 0, 0)
+
+  
 
     love.graphics.setColor(1, 1, 1, 1)
     drawWoman(woman1)
@@ -312,7 +314,11 @@ function love.update(dt)
       randomMovement = math.random(1, 3)
       randomName = math.random(1, 4)
       randomOffsetX = math.random(-300, 300)
-    	table.insert(activefish, createFish(fishNames[randomName], 138, 105, 0, 0, 10, fishMovement[randomMovement], 380 + randomOffsetX))
+      randomDirection = math.random(0, 1)
+      if randomDirection == 0 then
+        randomDirection = -1
+      end
+    	table.insert(activefish, createFish(fishNames[randomName], 138, 105, 0, 0, 10, randomDirection, fishMovement[randomMovement], 380 + randomOffsetX))
     end 
     
     for i, v in pairs(slidingFish) do
