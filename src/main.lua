@@ -17,7 +17,7 @@ local fishNames = {"bass", "goldfish", "catfish", "boot"}
 ------
 local fishCount = 6
 -- constructor for a fish; x and y are optional parameters
-function createFish(name, width, height, offsetX, offsetY, dpiscale, movement, x, y)
+function createFish(name, width, height, offsetX, offsetY, dpiscale, direction, movement, x, y)
     -- if x has not been specified then set a default value, same with y
     if not x then
         x = 680
@@ -38,6 +38,7 @@ function createFish(name, width, height, offsetX, offsetY, dpiscale, movement, x
         texture = love.graphics.newImage("textures/" .. name .. ".png", {
             dpiscale = dpiscale
         }),
+        direction = direction,
         movement = movement,
         caught = false
 
@@ -80,7 +81,8 @@ end
 slidingFish = {}
 function goToWoman(myWoman, myFish)
     table.insert(slidingFish, myFish)
-    myWoman.love = myWoman.love + 10
+    myWoman.love = myWoman.love + 33
+    myWoman.currentTexture = 2
     -- woman reactions
 end
 
@@ -114,7 +116,7 @@ end
 -- draws the fish using the texture, x, y and offsets. currently also draws edges to the sprite
 function drawFish(myFish)
     love.graphics.draw(myFish.texture, myFish.x + myFish.offsetX, myFish.y + myFish.offsetY)
-    fishDrawImageEdges(myFish)
+    -- fishDrawImageEdges(myFish)
     -- print("fish draw")
 end
 
@@ -133,12 +135,13 @@ function createWoman(name, y, texture)
     -- regular text
     local text = love.graphics.newText(font, name)
     local conf = {
-        dpiscale = 12
+        dpiscale = 10
     }
     local woman = {
         text = text,
         x = 810,
         y = y,
+        currentTexture = 1,
         textures = {love.graphics.newImage("textures/woman/" .. texture .. "1.png", conf),
                     love.graphics.newImage("textures/woman/" .. texture .. "2.png", conf),
                     love.graphics.newImage("textures/woman/" .. texture .. "3.png", conf)},
@@ -150,17 +153,19 @@ function createWoman(name, y, texture)
 end
 
 function drawWoman(woman)
-    love.graphics.setColor(1, 0.77, 0.62, 1)
+    love.graphics.setColor(1, 0.9, 0.9, 1)
     love.graphics.rectangle("fill", woman.x - 25, woman.y - 40, 150, 190)
     -- love.graphics.setColor(0.5,0.5,0.5,1)
     -- love.graphics.rectangle("fill", woman.x,woman.y, 100,100)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(woman.textures[1], woman.x - 5, woman.y - 20)
     love.graphics.setColor(0, 0, 0, 1)
     love.graphics.draw(woman.text, woman.x - 5, woman.y - 30)
     love.graphics.rectangle("fill", woman.x, woman.y + 110, 100, 20)
     love.graphics.setColor(1, 0.2, 0.2, 1)
     love.graphics.rectangle("fill", woman.x, woman.y + 110, woman.love, 20)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(woman.textures[1], woman.x + 5, woman.y - 20)
+  
 end
 
 -- websocket networking
@@ -245,9 +250,10 @@ function love.load()
   womens = {woman1, woman2, woman3}
   --creates 2 fish objects and stores them within a table
   activefish = {
-    createFish("bass", 138, 105, 0, 0, 10, "sin", 900),
-    createFish("catfish", 138, 105, 0, 0, 10, "cos"),
-    createFish("goldfish", 138, 105, 0, 0, 10, "tan")
+    createFish("bass", 138, 105, 0, 0, 10, 1, "sin", 900),
+    createFish("catfish", 138, 105, 0, 0, 10, -1, "cos"),
+    createFish("goldfish", 138, 105, 0, 0, 10, 1, "tan"),
+    createFish("boot",100,100,0,0,5, 0, "sin",100)
   }
  end
 
@@ -256,8 +262,8 @@ function love.draw()
     -- TODO: WRITE FOR LOOP TO GO THROUGH ACTIVE FISH  
     -- solved?
 
-    love.graphics.setColor(1, 1, 1, 1)
-    -- love.graphics.draw(love.graphics.newImage("textures/pond.jpg"))
+    love.graphics.setColor(1, 1, 1, 0.3)
+    love.graphics.draw(love.graphics.newImage("textures/pond.png"))
     -- end
 
     -- red tint
@@ -340,7 +346,7 @@ function love.update(dt)
   for i, f in pairs(activefish) do
     if not f.caught then
       if f.movement == "sin" then
-        f.x = f.x - 0.5
+        f.x = f.x - (0.5 * f.direction)
         if f.x < -200 then
           f.x = 860
         end
@@ -350,7 +356,7 @@ function love.update(dt)
         f.y = 280 + 20 * math.sin((f.x / 2) % (math.pi * 2))
       end
       if f.movement == "cos" then
-        f.x = f.x - 0.75
+        f.x = f.x - (0.75 * f.direction)
         if f.x < -200 then
           f.x = 860
         end
@@ -360,7 +366,7 @@ function love.update(dt)
         f.y = 280 + 30 * math.cos((f.x / 3) % (math.pi * 2))
       end
       if f.movement == "tan" then
-        f.x = f.x - 0.2
+        f.x = f.x - (f.direction * 0.2)
         if f.x < -200 then
           f.x = 860
         end
