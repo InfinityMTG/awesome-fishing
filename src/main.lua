@@ -80,6 +80,9 @@ function client:onmessage(message)
       n = n + 1
   end
   cursor.x = cursor.x + (data[1] * 10)
+  if cursor.x > 696 then cursor.x = 696 end
+  if cursor.x < 0 then cursor.x = 0 end
+  print(cursor.x, cursor.y)
   if tonumber(data[2]) < -0.55 and rod.isup == false then
     rod.isup = true
     sincechange = 0
@@ -92,7 +95,7 @@ function client:onmessage(message)
   else
     sincechange = sincechange + 1
   end
-  print(rod.isup, sincechange)
+  -- print(rod.isup, sincechange)
 end
 
 function client:onopen()
@@ -198,23 +201,13 @@ function love.update(dt)
   -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
   -- print(cursor.x , cursor.y)
   -- if fish["examplefish"].fish.checkCollision() then
-  -- for i,f in pairs(activefish) do
-  --   print(i)
-  --   if fishCheckCollision(f, cursor) then
-  --     cursor.touching_fish = true
-  --   else 
-  --     cursor.touching_fish = false
-  --   end
-  -- end
-  if fishCheckCollision(fish1, cursor) then
-    cursor.touching_fish = true
-  else 
-    cursor.touching_fish = false
-  end
-  if fishCheckCollision(fish2, cursor) then
-    cursor.touching_fish = true
-  else 
-    cursor.touching_fish = false
+  for i,f in pairs(activefish) do
+    if fishCheckCollision(f, cursor) then
+      -- print("damn u a real shrigma") 	
+      cursor.touching_fish = true
+    else 
+      cursor.touching_fish = false
+    end
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
   for i, f in pairs(activefish) do
