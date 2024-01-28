@@ -350,7 +350,7 @@ function love.update(dt)
   --move the rod at an offset from the target for the illusion of depth
   rod.x = 295 + ((cursor.x - 480) * 2)
   for i, f in pairs(activefish) do
-    if not f.caught then
+    if not f.caught and f.name ~= "boot" then
       if f.movement == "sin" then
         f.x = f.x - (0.5 * f.direction)
         if f.x < -200 then
