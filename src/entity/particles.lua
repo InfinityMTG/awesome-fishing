@@ -1,4 +1,4 @@
-waterParticle = love.graphics.newImage("textures/water_particle.png", {dpiscale = 0.5})
+waterParticle = love.graphics.newImage("textures/water_particle.png", {dpiscale = 1})
 particleSystem = love.graphics.newParticleSystem(waterParticle, 100)
 particleSystem:setParticleLifetime(0, 0.7)
 particleSystem:setSizeVariation(0.5)
