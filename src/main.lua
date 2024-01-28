@@ -14,7 +14,7 @@ local cursor = require("entity/fishing_cursor")
 ------
 
 -- constructor for a fish; x and y are optional parameters
-function createFish(name, width, height, offsetX, offsetY, dpiscale, x, y)
+function createFish(name, width, height, offsetX, offsetY, dpiscale, movement, x, y)
     -- if x has not been specified then set a default value, same with y
     if not x then
         x = 680
@@ -35,6 +35,7 @@ function createFish(name, width, height, offsetX, offsetY, dpiscale, x, y)
         texture = love.graphics.newImage("textures/" .. name .. ".png", {
             dpiscale = dpiscale
         }),
+        movement = movement,
         caught = false
 
     }
@@ -241,9 +242,9 @@ function love.load()
   womens = {woman1, woman2, woman3}
   --creates 2 fish objects and stores them within a table
   activefish = {
-    createFish("bass", 138, 105, 0, 0, 10, 900),
-    createFish("catfish", 138, 105, 0, 0, 10),
-    createFish("goldfish", 138, 105, 0, 0, 10)
+    createFish("bass", 138, 105, 0, 0, 10, "sin", 900),
+    createFish("catfish", 138, 105, 0, 0, 10, "cos"),
+    createFish("goldfish", 138, 105, 0, 0, 10, "tan")
   }
  end
 
@@ -298,6 +299,7 @@ function love.update(dt)
         v.x = v.x + 4
         if v.x > 1000 then
             table.remove(slidingFish, i)
+            table.remove(activefish, i)
         end
     end
     -- display particles if the cursor is touching a fish
@@ -323,7 +325,7 @@ function love.update(dt)
   rod.x = 295 + ((cursor.x - 480) * 2)
   for i, f in pairs(activefish) do
     if not f.caught then
-      if i == 1 then
+      if f.movement == "sin" then
         f.x = f.x - 0.5
         if f.x < -200 then
           f.x = 860
@@ -333,7 +335,7 @@ function love.update(dt)
         end
         f.y = 280 + 20 * math.sin((f.x / 2) % (math.pi * 2))
       end
-      if i == 2 then
+      if f.movement == "cos" then
         f.x = f.x - 0.75
         if f.x < -200 then
           f.x = 860
@@ -343,7 +345,7 @@ function love.update(dt)
         end
         f.y = 280 + 30 * math.cos((f.x / 3) % (math.pi * 2))
       end
-      if i == 3 then
+      if f.movement == "tan" then
         f.x = f.x - 0.2
         if f.x < -200 then
           f.x = 860
