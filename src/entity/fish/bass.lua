@@ -1,7 +1,7 @@
 local fish = require("entity/fish")
 
 local bass = {}
-bass.fish = fish
+bass.fish = createFish()
 bass.texture = love.graphics.newImage("textures/bass.png", {dpiscale = 30})
 bass.fish.width = 100
 bass.fish.height = 107
