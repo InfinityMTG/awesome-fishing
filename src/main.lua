@@ -7,10 +7,16 @@ local particleSystem = require("entity/particles")
 local cursor = require("entity/fishing_cursor")
 
 
-function createFish (name, width, height, offsetX, offsetY, dpiscale)
+function createFish (name, width, height, offsetX, offsetY, dpiscale, x, y)
+  if not x then
+    x = 380    
+  end
+  if not y then
+    y = 300
+  end
   local fish = {
-    x = 380,
-    y = 300,
+    x = x,
+    y = y,
     width = width,
     height = height,
     offsetX = offsetX,
@@ -28,6 +34,7 @@ end
 function updateFishBox (myFish)
   myFish.hitbox:release()
   myFish.hitbox = love.physics.newRectangleShape(myFish.x + myFish.offsetX, myFish.y + myFish.offsetY, myFish.width, myFish.height, 0)
+  return myFish.hitbox
 end
 
 function fishCaught (myFish)
@@ -41,7 +48,7 @@ function fishCheckCollision (myFish, cursor)
       -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY, "(collision!)")
     	return true
     else
-      print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
+      -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
       return false
     end
   end
@@ -49,11 +56,12 @@ end
 
 function drawFish (myFish)
   love.graphics.draw(myFish.texture, myFish.x + myFish.offsetX, myFish.y + myFish.offsetY)
+  fishDrawImageEdges(myFish)
   -- print("fish draw")
 end
 
 function fishDrawImageEdges (myFish)
-  print("drawing image edges...")
+  -- print("drawing image edges...")
   love.graphics.line(myFish.x, myFish.y, myFish.x + myFish.width, myFish.y)
   love.graphics.line(myFish.x + myFish.width, myFish.y, myFish.x + myFish.width, myFish.y + myFish.height)
   love.graphics.line(myFish.x + myFish.width, myFish.y + myFish.height, myFish.x, myFish.y + myFish.height)
@@ -111,10 +119,13 @@ function love.load()
   woman2 = createWoman("Catfish",280,"catfish")
   woman3 = createWoman("Bass",480,"bass")
   activefish = {
-    createFish("bass", 100, 107, 0, 0, 30),
-    createFish("examplefish", 111, 60, 23, 14, 1)
+    -- createFish("examplefish", 111, 60, 0, 0, 1, 200),
+    -- createFish("bass", 100, 107, 0, 0, 30)
   }
-  print(#activefish)
+  fish1 = createFish("examplefish", 111, 60, 0, 0, 1, 200)
+  fish2 = createFish("bass", 100, 107, 0, 0, 30)
+  table.insert(activefish, fish1)
+  table.insert(activefish, fish2)
  end
 
 --currently drawn objects
@@ -128,7 +139,7 @@ function love.draw()
   --     love.graphics.draw(f.texture, f.fish.x, f.fish.y)
   --   end
   love.graphics.setColor(1,1,1,1)
-  love.graphics.draw(love.graphics.newImage("textures/pond.jpg"))
+  -- love.graphics.draw(love.graphics.newImage("textures/pond.jpg"))
   -- end
   for i,f in pairs(activefish) do
     if f.caught then
@@ -187,13 +198,23 @@ function love.update(dt)
   -- print(fish["examplefish"].fish.x , fish["examplefish"].fish.y)
   -- print(cursor.x , cursor.y)
   -- if fish["examplefish"].fish.checkCollision() then
-  for i,f in pairs(activefish) do
-    if fishCheckCollision(f, cursor) then
-      -- print("damn u a real shrigma") 	
-      cursor.touching_fish = true
-    else 
-      cursor.touching_fish = false
-    end
+  -- for i,f in pairs(activefish) do
+  --   print(i)
+  --   if fishCheckCollision(f, cursor) then
+  --     cursor.touching_fish = true
+  --   else 
+  --     cursor.touching_fish = false
+  --   end
+  -- end
+  if fishCheckCollision(fish1, cursor) then
+    cursor.touching_fish = true
+  else 
+    cursor.touching_fish = false
+  end
+  if fishCheckCollision(fish2, cursor) then
+    cursor.touching_fish = true
+  else 
+    cursor.touching_fish = false
   end
   rod.x = 295 + ((cursor.x - 480) * 2)
   for i, f in pairs(activefish) do
@@ -204,9 +225,7 @@ function love.update(dt)
   -- fish.fish.hitbox:computeAABB(fish.fish.x + 0.5, 0, 0, 1)
   for i, f in pairs(activefish) do
     if not f.caught then
-      updateFishBox(f)
-      -- f.hitbox:release()
-      -- f.hitbox = love.physics.newRectangleShape(f.fish.x + f.fish.offsetX, f.fish.y + f.fish.offsetY, f.fish.width, f.fish.height, 0)
+      f.hitbox = updateFishBox(f)
     end
   end
 
@@ -224,20 +243,23 @@ function love.update(dt)
     else
       powerEnough = powerEnough - 1
     end
-    if powerEnough > 200 then
-      powerEnough = 200
-      if cursor.touching_fish == true then
-        print("win")
+    if powerEnough > 200 then 
+      powerEnough = 200 
+      -- if cursor.touching_fish == true then
+        
+        -- fishCaught(activeFish[currentFish])
         for i,f in pairs(activefish) do
           if f.hitbox:testPoint(0, 0, 0, cursor.x, cursor.y) then
+            print("win")
             fishCaught(f)
+            powerEnough = 0
           end
         end
         
         -- fish["examplefish"].fish.caught = true
         -- fish["examplefish"].fish.x = 380
-        powerEnough = 0
-      end
+        
+      -- end
     end
     if powerEnough <= 0 then
       powerEnough = 0
