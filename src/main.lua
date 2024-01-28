@@ -191,13 +191,14 @@ function love.load()
   --creates 2 fish objects and stores them within a table
   activefish = {
     createFish("examplefish", 111, 60, 0, 0, 1, 200),
-    createFish("bass", 100, 107, 0, 0, 30)
+    createFish("bass", 100, 107, 0, 0, 30),
+    createFish("examplefish", 111, 60, 0, 0, 1, 100),
+    createFish("bass", 100, 107, 0, 0, 30, 150),
+    createFish("examplefish", 111, 60, 0, 0, 1, 500),
+    createFish("bass", 100, 107, 0, 0, 30, 400),
+    createFish("examplefish", 111, 60, 0, 0, 1, 600),
+    createFish("bass", 100, 107, 0, 0, 30, 350)
   }
-  --kept in to try and debug issues with collision detection
-  -- fish1 = createFish("examplefish", 111, 60, 0, 0, 1, 200)
-  -- fish2 = createFish("bass", 100, 107, 0, 0, 30)
-  -- table.insert(activefish, fish1)
-  -- table.insert(activefish, fish2)
  end
 
 --currently drawn objects
