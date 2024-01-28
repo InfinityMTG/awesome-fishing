@@ -41,7 +41,7 @@ function fishCheckCollision (myFish, cursor)
       -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY, "(collision!)")
     	return true
     else
-      print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
+      -- print("cursor: " , cursor.x , cursor.y, "myFish: ", topLeftX, myFish.x, topLeftY, myFish.y, bottomRightX, bottomRightY)
       return false
     end
   end
@@ -53,7 +53,7 @@ function drawFish (myFish)
 end
 
 function fishDrawImageEdges (myFish)
-  print("drawing image edges...")
+  -- print("drawing image edges...")
   love.graphics.line(myFish.x, myFish.y, myFish.x + myFish.width, myFish.y)
   love.graphics.line(myFish.x + myFish.width, myFish.y, myFish.x + myFish.width, myFish.y + myFish.height)
   love.graphics.line(myFish.x + myFish.width, myFish.y + myFish.height, myFish.x, myFish.y + myFish.height)
@@ -72,8 +72,9 @@ function client:onmessage(message)
       n = n + 1
   end
   cursor.x = cursor.x + (data[1] * 10)
-  if cursor.x > 960 then cursor.x = 960 end
+  if cursor.x > 696 then cursor.x = 696 end
   if cursor.x < 0 then cursor.x = 0 end
+  print(cursor.x, cursor.y)
   if tonumber(data[2]) < -0.55 and rod.isup == false then
     rod.isup = true
     sincechange = 0
@@ -86,11 +87,11 @@ function client:onmessage(message)
   else
     sincechange = sincechange + 1
   end
-  print(rod.isup, sincechange)
+  -- print(rod.isup, sincechange)
 end
 
 function client:onopen()
-  print("connected!")
+  -- print("connected!")
 end
 
 --accept keypresses and pass them to the keymap function table
@@ -116,7 +117,7 @@ function love.load()
     createFish("bass", 100, 107, 0, 0, 30),
     createFish("examplefish", 111, 60, 23, 14, 1)
   }
-  print(#activefish)
+  -- print(#activefish)
  end
 
 --currently drawn objects
@@ -151,7 +152,7 @@ function love.draw()
 
   -- for i, f in pairs(activefish) do
   --   f.fish.drawImageEdges()
-  --   print(f.fish.x + f.fish.width)
+    -- print(f.fish.x + f.fish.width)
   -- end
   --outlines around fish and its bounding box, respectively
   -- fish["examplefish"].fish.drawImageEdges();
@@ -229,7 +230,7 @@ function love.update(dt)
     if powerEnough > 200 then
       powerEnough = 200
       if cursor.touching_fish == true then
-        print("win")
+        -- print("win")
         for i,f in pairs(activefish) do
           if f.hitbox:testPoint(0, 0, 0, cursor.x, cursor.y) then
             fishCaught(f)
