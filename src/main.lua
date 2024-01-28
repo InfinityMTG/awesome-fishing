@@ -35,6 +35,8 @@ function client:onmessage(message)
       n = n + 1
   end
   cursor.x = cursor.x + (data[1] * 10)
+  if cursor.x > 960 then cursor.x = 960 end
+  if cursor.x < 0 then cursor.x = 0 end
   if tonumber(data[2]) < -0.55 and rod.isup == false then
     rod.isup = true
     sincechange = 0
